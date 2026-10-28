@@ -232,7 +232,7 @@
 
         async function fetchFoodsFromBackend() {
             try {
-                const response = await fetch('http://localhost:5001/api/foods');
+                const response = await fetch('https://nutriplan-backend-ejiy.onrender.com/api/foods');
                 const result = await response.json();
                 if (result.success && result.data.length > 0) {
                     allFoods = result.data;
