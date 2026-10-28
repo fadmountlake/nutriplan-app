@@ -34,19 +34,9 @@
                         <label class="block text-[11px] font-medium text-slate-600 mb-1">NIM Mahasiswa</label>
                         <input type="text" id="nim" placeholder="043xxxxxx" class="w-full border rounded-lg p-2 text-xs border-slate-300">
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-600 mb-1">UPBJJ</label>
-                            <input type="text" id="upbjj" placeholder="Jakarta/Bekasi" class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Status</label>
-                            <select id="studentStatus" class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                                <option value="Kuliah+Kerja">Kuliah + Kerja</option>
-                                <option value="Anak Kos">Anak Kos</option>
-                                <option value="Rumah">Tinggal di Rumah</option>
-                            </select>
-                        </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-600 mb-1">UPBJJ</label>
+                        <input type="text" id="upbjj" placeholder="Jakarta/Bekasi" class="w-full border rounded-lg p-2 text-xs border-slate-300">
                     </div>
                 </div>
             </div>
@@ -88,16 +78,6 @@
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-1">Aktivitas Harian</label>
-                        <select id="activity" class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                            <option value="1.2">Jarang Olahraga</option>
-                            <option value="1.375">Ringan (1-3x/minggu)</option>
-                            <option value="1.55" selected>Sedang (3-5x/minggu)</option>
-                            <option value="1.725">Berat (6-7x/minggu)</option>
-                        </select>
-                    </div>
-
-                    <div>
                         <label class="block text-[11px] font-medium text-slate-600 mb-1">Target Berat Badan</label>
                         <select id="goal" class="w-full border rounded-lg p-2 text-xs border-slate-300">
                             <option value="maintain">Pertahankan BB</option>
@@ -125,7 +105,6 @@
                     <span id="studentBadge" class="text-[10px] bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-100 font-medium">Mahasiswa UT</span>
                 </div>
 
-                <!-- Grid 4 Kolom: BMR, Target TDEE, Sudah Dimakan, Sisa Kuota -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center mb-4">
                     <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
                         <span class="block text-[10px] text-slate-500 uppercase font-bold">BMR (Dasar)</span>
@@ -145,12 +124,10 @@
                     </div>
                 </div>
 
-                <!-- Progress Bar Kalori -->
                 <div class="w-full bg-slate-100 rounded-full h-2.5 mb-4 overflow-hidden">
                     <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
 
-                <!-- Breakdown Target vs Asupan Real-Time Makronutrisi -->
                 <div class="grid grid-cols-3 gap-2 text-center pt-3 border-t border-slate-100">
                     <div class="border border-emerald-200 bg-emerald-50/50 p-2.5 rounded-lg">
                         <span class="block text-[10px] text-emerald-700 font-medium">Karbohidrat (50%)</span>
@@ -167,23 +144,30 @@
                 </div>
             </div>
 
-            <!-- Panel Pencarian & Input Makanan TKPI + USDA -->
+            <!-- Panel Pencarian & Input Makanan Terpadu -->
             <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-magnifying-glass text-indigo-600"></i> Input Makanan (Database TKPI & USDA)
-                </h2>
+                <div class="flex justify-between items-center">
+                    <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass text-indigo-600"></i> Pilih & Cari Makanan (TKPI & USDA)
+                    </h2>
+                    <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded border border-slate-200">
+                        <i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i> Porsi bawaan dataset: 100g BDD
+                    </span>
+                </div>
 
-                <div class="grid grid-cols-12 gap-2">
-                    <div class="col-span-6">
-                        <input type="text" id="foodSearch" oninput="filterFoodList()" placeholder="Cari bahan makanan (misal: Nasi, Telur, Ayam)..." class="w-full border rounded-lg p-2 text-xs border-slate-300">
+                <div class="grid grid-cols-12 gap-2 relative">
+                    <!-- Form Auto-Complete Pencarian Makanan (Kembali Penuh 10 Kolom) -->
+                    <div class="col-span-10 relative">
+                        <input type="text" id="foodInput" onfocus="showDropdown()" oninput="filterFoodList()" placeholder="Ketik nama makanan (misal: Nasi, Telur, Ayam)..." class="w-full border rounded-lg p-2.5 text-xs border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="hidden" id="selectedFoodId">
+                        
+                        <!-- Dropdown Hasil Pencarian -->
+                        <div id="foodDropdown" class="hidden absolute z-20 left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        </div>
                     </div>
-                    <div class="col-span-4">
-                        <select id="foodSelect" class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                            <option value="">Pilih Makanan...</option>
-                        </select>
-                    </div>
+
                     <div class="col-span-2">
-                        <button onclick="addFoodToLog()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg text-xs shadow-sm">
+                        <button onclick="addFoodToLog()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-xs shadow-sm transition">
                             + Tambah
                         </button>
                     </div>
@@ -236,7 +220,7 @@
                 const result = await response.json();
                 if (result.success && result.data.length > 0) {
                     allFoods = result.data;
-                    populateFoodSelect(allFoods.slice(0, 50));
+                    renderDropdownItems(allFoods.slice(0, 50));
                     calculateTarget();
                 }
             } catch (err) {
@@ -244,36 +228,60 @@
             }
         }
 
-        function populateFoodSelect(foods) {
-            const select = document.getElementById('foodSelect');
-            select.innerHTML = '<option value="">Pilih Makanan...</option>';
-            foods.forEach(food => {
-                const opt = document.createElement('option');
-                opt.value = food.id;
-                opt.innerText = `${food.name} (${food.calories} kcal)`;
-                select.appendChild(opt);
-            });
+        function renderDropdownItems(foods) {
+            const dropdown = document.getElementById('foodDropdown');
+            if (foods.length === 0) {
+                dropdown.innerHTML = '<div class="p-3 text-xs text-slate-400 italic">Makanan tidak ditemukan</div>';
+                return;
+            }
+
+            dropdown.innerHTML = foods.map(food => `
+                <div onclick="selectFood('${food.id}', '${food.name.replace(/'/g, "\\'")}', ${food.calories})" 
+                     class="p-2.5 text-xs hover:bg-indigo-50 cursor-pointer border-b border-slate-100 flex justify-between items-center transition">
+                    <span class="font-medium text-slate-700">${food.name}</span>
+                    <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded text-slate-500 font-bold">${food.calories} kcal</span>
+                </div>
+            `).join('');
+        }
+
+        function showDropdown() {
+            document.getElementById('foodDropdown').classList.remove('hidden');
         }
 
         function filterFoodList() {
-            const query = document.getElementById('foodSearch').value.toLowerCase();
+            const query = document.getElementById('foodInput').value.toLowerCase();
+            document.getElementById('selectedFoodId').value = ''; 
             const filtered = allFoods.filter(f => f.name.toLowerCase().includes(query)).slice(0, 50);
-            populateFoodSelect(filtered);
+            renderDropdownItems(filtered);
+            showDropdown();
         }
+
+        function selectFood(id, name, calories) {
+            document.getElementById('foodInput').value = `${name} (${calories} kcal)`;
+            document.getElementById('selectedFoodId').value = id;
+            document.getElementById('foodDropdown').classList.add('hidden');
+        }
+
+        document.addEventListener('click', function(e) {
+            const container = document.getElementById('foodInput').parentElement;
+            if (!container.contains(e.target)) {
+                document.getElementById('foodDropdown').classList.add('hidden');
+            }
+        });
 
         function calculateTarget() {
             const nim = document.getElementById('nim').value || '-';
-            const status = document.getElementById('studentStatus').value;
-            document.getElementById('studentBadge').innerText = `NIM: ${nim} (${status})`;
+            const upbjj = document.getElementById('upbjj').value || '-';
+            document.getElementById('studentBadge').innerText = `NIM: ${nim} (${upbjj})`;
 
             const gender = document.querySelector('input[name="gender"]:checked').value;
             const age = parseFloat(document.getElementById('age').value) || 23;
             const height = parseFloat(document.getElementById('height').value) || 170;
             const weight = parseFloat(document.getElementById('weight').value) || 65;
-            const activity = parseFloat(document.getElementById('activity').value) || 1.55;
+            
+            const activity = 1.55; 
             const goal = document.getElementById('goal').value;
 
-            // Rumus Mifflin-St Jeor
             calculatedBmr = (gender === 'male') 
                 ? (10 * weight) + (6.25 * height) - (5 * age) + 5
                 : (10 * weight) + (6.25 * height) - (5 * age) - 161;
@@ -292,9 +300,10 @@
         }
 
         function addFoodToLog() {
-            const foodId = document.getElementById('foodSelect').value;
+            const foodId = document.getElementById('selectedFoodId').value;
+
             if (!foodId) {
-                alert("Pilih makanan terlebih dahulu!");
+                alert("Pilih makanan dari daftar pencarian terlebih dahulu!");
                 return;
             }
 
@@ -303,6 +312,10 @@
                 loggedFoods.push(foodItem);
                 renderLogTable();
                 updateSummary();
+                
+                document.getElementById('foodInput').value = '';
+                document.getElementById('selectedFoodId').value = '';
+                renderDropdownItems(allFoods.slice(0, 50));
             }
         }
 
@@ -356,17 +369,14 @@
             document.getElementById('consumedCal').innerText = `${Math.round(totalConsumed)} kcal`;
             document.getElementById('remainingCal').innerText = `${Math.round(remaining)} kcal`;
 
-            // Hitung Target Makronutrisi Harian
             const targetCarbs = Math.round((targetTdee * 0.5) / 4);
             const targetProtein = Math.round((targetTdee * 0.25) / 4);
             const targetFat = Math.round((targetTdee * 0.25) / 9);
 
-            // Update Tampilan Tracker (Asupan Real / Target)
             document.getElementById('carbsTracker').innerText = `${Math.round(totalCarbs)}g / ${targetCarbs}g`;
             document.getElementById('proteinTracker').innerText = `${Math.round(totalProtein)}g / ${targetProtein}g`;
             document.getElementById('fatTracker').innerText = `${Math.round(totalFat)}g / ${targetFat}g`;
 
-            // Progress Bar Kalori
             const percentage = targetTdee > 0 ? Math.min(100, Math.round((totalConsumed / targetTdee) * 100)) : 0;
             const progressBar = document.getElementById('progressBar');
             progressBar.style.width = `${percentage}%`;
