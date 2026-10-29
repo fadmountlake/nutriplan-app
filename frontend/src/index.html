@@ -11,201 +11,304 @@
 
     <!-- Header / Navbar -->
     <header class="bg-indigo-600 text-white shadow-md py-4 mb-6">
-        <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <h1 class="text-xl font-bold flex items-center gap-2">
                 <i class="fa-solid fa-utensils"></i> NutriPlan Web App
             </h1>
-            <span class="text-xs bg-indigo-500 px-3 py-1 rounded-full"><i class="fa-solid fa-graduation-cap"></i> Capstone SI - Universitas Terbuka</span>
+            
+            <!-- Menu Navigasi -->
+            <nav class="flex gap-6 text-sm font-medium">
+                <button onclick="showSection('beranda')" id="nav-beranda" class="hover:text-indigo-200 border-b-2 border-white pb-1 transition-all">Beranda</button>
+                <button onclick="showSection('profile')" id="nav-profile" class="hover:text-indigo-200 border-b-2 border-transparent pb-1 transition-all">Profile</button>
+                <button onclick="showSection('kamus')" id="nav-kamus" class="hover:text-indigo-200 border-b-2 border-transparent pb-1 transition-all">Kamus</button>
+            </nav>
+
+            <span class="text-xs bg-indigo-500 px-3 py-1 rounded-full hidden md:block"><i class="fa-solid fa-graduation-cap"></i> Capstone SI - Universitas Terbuka</span>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 pb-12 grid grid-cols-1 md:grid-cols-12 gap-8">
+    <main class="max-w-6xl mx-auto px-4 pb-12">
         
-        <!-- Form Input Data Fisik & Profil UT (Kolom Kiri) -->
-        <section class="md:col-span-4 space-y-6">
+        <!-- ==================== SECTION BERANDA (Aplikasi Utama) ==================== -->
+        <div id="section-beranda" class="grid grid-cols-1 md:grid-cols-12 gap-8 block">
             
-            <!-- Profil Mahasiswa UT -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <h2 class="text-sm font-bold text-slate-900 mb-3 pb-2 border-b border-slate-100 flex items-center gap-2">
-                    <i class="fa-solid fa-id-card text-indigo-600"></i> Identitas Mahasiswa UT
-                </h2>
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-1">NIM Mahasiswa</label>
-                        <input type="text" id="nim" placeholder="043xxxxxx" class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-1">UPBJJ</label>
-                        <input type="text" id="upbjj" placeholder="Jakarta/Bekasi" class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Form Data Fisik -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <h2 class="text-sm font-bold text-slate-900 mb-3 pb-2 border-b border-slate-100 flex items-center gap-2">
-                    <i class="fa-solid fa-user-gear text-indigo-600"></i> Data Fisik & Target
-                </h2>
-                
-                <form id="nutritionForm" class="space-y-3" onsubmit="event.preventDefault(); calculateTarget();">
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-1">Jenis Kelamin</label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <label class="flex items-center justify-center p-1.5 border rounded-lg cursor-pointer hover:bg-slate-50 border-slate-200 text-xs">
-                                <input type="radio" name="gender" value="male" checked class="text-indigo-600">
-                                <span class="ml-2">Pria</span>
-                            </label>
-                            <label class="flex items-center justify-center p-1.5 border rounded-lg cursor-pointer hover:bg-slate-50 border-slate-200 text-xs">
-                                <input type="radio" name="gender" value="female" class="text-indigo-600">
-                                <span class="ml-2">Wanita</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2">
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Usia</label>
-                            <input type="number" id="age" value="23" required class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Tinggi (cm)</label>
-                            <input type="number" id="height" value="170" required class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Berat (kg)</label>
-                            <input type="number" id="weight" value="65" required class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-1">Target Berat Badan</label>
-                        <select id="goal" class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                            <option value="maintain">Pertahankan BB</option>
-                            <option value="cut">Turunkan BB (Defisit)</option>
-                            <option value="bulk">Naikkan BB (Surplus)</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg transition text-xs shadow-md">
-                        Set Target Gizi Harian
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <!-- Logging & Tracker Section (Kolom Kanan) -->
-        <section class="md:col-span-8 space-y-6">
-            
-            <!-- Ringkasan Progress Sisa Kalori Real-Time -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-indigo-600"></i> Ringkasan Asupan Hari Ini
+            <!-- Form Input Data Fisik & Profil UT (Kolom Kiri) -->
+            <section class="md:col-span-4 space-y-6">
+                <!-- Profil Mahasiswa UT -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-sm font-bold text-slate-900 mb-3 pb-2 border-b border-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-id-card text-indigo-600"></i> Identitas Mahasiswa UT
                     </h2>
-                    <span id="studentBadge" class="text-[10px] bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-100 font-medium">Mahasiswa UT</span>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center mb-4">
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
-                        <span class="block text-[10px] text-slate-500 uppercase font-bold">BMR (Dasar)</span>
-                        <span id="bmrCal" class="text-base font-extrabold text-slate-700">0 kcal</span>
-                    </div>
-                    <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
-                        <span class="block text-[10px] text-indigo-600 uppercase font-bold">Target TDEE</span>
-                        <span id="targetCal" class="text-base font-extrabold text-indigo-600">0 kcal</span>
-                    </div>
-                    <div class="bg-amber-50 p-3 rounded-lg border border-amber-100">
-                        <span class="block text-[10px] text-amber-600 uppercase font-bold">Sudah Dimakan</span>
-                        <span id="consumedCal" class="text-base font-extrabold text-amber-600">0 kcal</span>
-                    </div>
-                    <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-100">
-                        <span class="block text-[10px] text-emerald-600 uppercase font-bold">Sisa Kuota</span>
-                        <span id="remainingCal" class="text-base font-extrabold text-emerald-600">0 kcal</span>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-600 mb-1">NIM Mahasiswa</label>
+                            <input type="text" id="nim" placeholder="043xxxxxx" class="w-full border rounded-lg p-2 text-xs border-slate-300">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-600 mb-1">UPBJJ</label>
+                            <input type="text" id="upbjj" placeholder="Jakarta/Bekasi" class="w-full border rounded-lg p-2 text-xs border-slate-300">
+                        </div>
                     </div>
                 </div>
 
-                <div class="w-full bg-slate-100 rounded-full h-2.5 mb-4 overflow-hidden">
-                    <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2 text-center pt-3 border-t border-slate-100">
-                    <div class="border border-emerald-200 bg-emerald-50/50 p-2.5 rounded-lg">
-                        <span class="block text-[10px] text-emerald-700 font-medium">Karbohidrat (50%)</span>
-                        <span id="carbsTracker" class="text-xs font-bold text-emerald-800">0g / 0g</span>
-                    </div>
-                    <div class="border border-blue-200 bg-blue-50/50 p-2.5 rounded-lg">
-                        <span class="block text-[10px] text-blue-700 font-medium">Protein (25%)</span>
-                        <span id="proteinTracker" class="text-xs font-bold text-blue-800">0g / 0g</span>
-                    </div>
-                    <div class="border border-amber-200 bg-amber-50/50 p-2.5 rounded-lg">
-                        <span class="block text-[10px] text-amber-700 font-medium">Lemak (25%)</span>
-                        <span id="fatTracker" class="text-xs font-bold text-amber-800">0g / 0g</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Panel Pencarian & Input Makanan Terpadu -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-magnifying-glass text-indigo-600"></i> Pilih & Cari Makanan (TKPI & USDA)
+                <!-- Form Data Fisik -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-sm font-bold text-slate-900 mb-3 pb-2 border-b border-slate-100 flex items-center gap-2">
+                        <i class="fa-solid fa-user-gear text-indigo-600"></i> Data Fisik & Target
                     </h2>
-                    <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded border border-slate-200">
-                        <i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i> Porsi bawaan dataset: 100g BDD
-                    </span>
-                </div>
+                    
+                    <form id="nutritionForm" class="space-y-3" onsubmit="event.preventDefault(); calculateTarget();">
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Jenis Kelamin</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="flex items-center justify-center p-1.5 border rounded-lg cursor-pointer hover:bg-slate-50 border-slate-200 text-xs">
+                                    <input type="radio" name="gender" value="male" checked class="text-indigo-600">
+                                    <span class="ml-2">Pria</span>
+                                </label>
+                                <label class="flex items-center justify-center p-1.5 border rounded-lg cursor-pointer hover:bg-slate-50 border-slate-200 text-xs">
+                                    <input type="radio" name="gender" value="female" class="text-indigo-600">
+                                    <span class="ml-2">Wanita</span>
+                                </label>
+                            </div>
+                        </div>
 
-                <div class="grid grid-cols-12 gap-2 relative">
-                    <!-- Form Auto-Complete Pencarian Makanan (Kembali Penuh 10 Kolom) -->
-                    <div class="col-span-10 relative">
-                        <input type="text" id="foodInput" onfocus="showDropdown()" oninput="filterFoodList()" placeholder="Ketik nama makanan (misal: Nasi, Telur, Ayam)..." class="w-full border rounded-lg p-2.5 text-xs border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <input type="hidden" id="selectedFoodId">
-                        
-                        <!-- Dropdown Hasil Pencarian -->
-                        <div id="foodDropdown" class="hidden absolute z-20 left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-600 mb-1">Usia</label>
+                                <input type="number" id="age" value="23" required class="w-full border rounded-lg p-2 text-xs border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-600 mb-1">Tinggi (cm)</label>
+                                <input type="number" id="height" value="170" required class="w-full border rounded-lg p-2 text-xs border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-600 mb-1">Berat (kg)</label>
+                                <input type="number" id="weight" value="65" required class="w-full border rounded-lg p-2 text-xs border-slate-300">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Target Berat Badan</label>
+                            <select id="goal" class="w-full border rounded-lg p-2 text-xs border-slate-300">
+                                <option value="maintain">Pertahankan BB</option>
+                                <option value="cut">Turunkan BB (Defisit)</option>
+                                <option value="bulk">Naikkan BB (Surplus)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg transition text-xs shadow-md">
+                            Set Target Gizi Harian
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Logging & Tracker Section (Kolom Kanan) -->
+            <section class="md:col-span-8 space-y-6">
+                <!-- Ringkasan Progress Sisa Kalori Real-Time -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-indigo-600"></i> Ringkasan Asupan Hari Ini
+                        </h2>
+                        <span id="studentBadge" class="text-[10px] bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-100 font-medium">Mahasiswa UT</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center mb-4">
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <span class="block text-[10px] text-slate-500 uppercase font-bold">BMR (Dasar)</span>
+                            <span id="bmrCal" class="text-base font-extrabold text-slate-700">0 kcal</span>
+                        </div>
+                        <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <span class="block text-[10px] text-indigo-600 uppercase font-bold">Target TDEE</span>
+                            <span id="targetCal" class="text-base font-extrabold text-indigo-600">0 kcal</span>
+                        </div>
+                        <div class="bg-amber-50 p-3 rounded-lg border border-amber-100">
+                            <span class="block text-[10px] text-amber-600 uppercase font-bold">Sudah Dimakan</span>
+                            <span id="consumedCal" class="text-base font-extrabold text-amber-600">0 kcal</span>
+                        </div>
+                        <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-100">
+                            <span class="block text-[10px] text-emerald-600 uppercase font-bold">Sisa Kuota</span>
+                            <span id="remainingCal" class="text-base font-extrabold text-emerald-600">0 kcal</span>
                         </div>
                     </div>
 
-                    <div class="col-span-2">
-                        <button onclick="addFoodToLog()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-xs shadow-sm transition">
-                            + Tambah
+                    <div class="w-full bg-slate-100 rounded-full h-2.5 mb-4 overflow-hidden">
+                        <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center pt-3 border-t border-slate-100">
+                        <div class="border border-emerald-200 bg-emerald-50/50 p-2.5 rounded-lg">
+                            <span class="block text-[10px] text-emerald-700 font-medium">Karbohidrat (50%)</span>
+                            <span id="carbsTracker" class="text-xs font-bold text-emerald-800">0g / 0g</span>
+                        </div>
+                        <div class="border border-blue-200 bg-blue-50/50 p-2.5 rounded-lg">
+                            <span class="block text-[10px] text-blue-700 font-medium">Protein (25%)</span>
+                            <span id="proteinTracker" class="text-xs font-bold text-blue-800">0g / 0g</span>
+                        </div>
+                        <div class="border border-amber-200 bg-amber-50/50 p-2.5 rounded-lg">
+                            <span class="block text-[10px] text-amber-700 font-medium">Lemak (25%)</span>
+                            <span id="fatTracker" class="text-xs font-bold text-amber-800">0g / 0g</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Pencarian & Input Makanan Terpadu -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass text-indigo-600"></i> Pilih & Cari Makanan (TKPI & USDA)
+                        </h2>
+                        <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded border border-slate-200">
+                            <i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i> Porsi bawaan dataset: 100g BDD
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-2 relative">
+                        <div class="col-span-10 relative">
+                            <input type="text" id="foodInput" onfocus="showDropdown()" oninput="filterFoodList()" placeholder="Ketik nama makanan (misal: Nasi, Telur, Ayam)..." class="w-full border rounded-lg p-2.5 text-xs border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <input type="hidden" id="selectedFoodId">
+                            
+                            <div id="foodDropdown" class="hidden absolute z-20 left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            </div>
+                        </div>
+
+                        <div class="col-span-2">
+                            <button onclick="addFoodToLog()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-xs shadow-sm transition">
+                                + Tambah
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabel Logging / Catatan Makanan Hari Ini -->
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-list-ul text-indigo-600"></i> Catatan Makanan Terinput
+                        </h2>
+                        <button onclick="clearLog()" class="text-[10px] text-red-600 hover:underline">
+                            Reset Catatan
                         </button>
                     </div>
-                </div>
-            </div>
 
-            <!-- Tabel Logging / Catatan Makanan Hari Ini -->
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-list-ul text-indigo-600"></i> Catatan Makanan Terinput
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-50 text-slate-700 uppercase text-[10px] border-b">
+                                <tr>
+                                    <th class="p-2">Nama Makanan</th>
+                                    <th class="p-2">Kalori</th>
+                                    <th class="p-2">Karbo</th>
+                                    <th class="p-2">Protein</th>
+                                    <th class="p-2">Lemak</th>
+                                    <th class="p-2 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="foodLogTable">
+                                <tr>
+                                    <td colspan="6" class="p-4 text-center text-slate-400 italic">Belum ada makanan yang diinput hari ini.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== SECTION PROFILE ==================== -->
+        <div id="section-profile" class="hidden">
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-users text-indigo-600"></i> Tim Pengembang Sistem
                     </h2>
-                    <button onclick="clearLog()" class="text-[10px] text-red-600 hover:underline">
-                        Reset Catatan
-                    </button>
+                    <p class="text-sm text-slate-500 mt-2">Capstone Project Sistem Informasi - Universitas Terbuka</p>
                 </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-600">
-                        <thead class="bg-slate-50 text-slate-700 uppercase text-[10px] border-b">
-                            <tr>
-                                <th class="p-2">Nama Makanan</th>
-                                <th class="p-2">Kalori</th>
-                                <th class="p-2">Karbo</th>
-                                <th class="p-2">Protein</th>
-                                <th class="p-2">Lemak</th>
-                                <th class="p-2 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="foodLogTable">
-                            <tr>
-                                <td colspan="6" class="p-4 text-center text-slate-400 italic">Belum ada makanan yang diinput hari ini.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Anggota 1 -->
+                    <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100 hover:shadow-md transition">
+                        <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xl">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Nama Anggota 1</h3>
+                            <p class="text-xs text-slate-500">NIM: 043xxxxxx</p>
+                        </div>
+                    </div>
+                    <!-- Anggota 2 -->
+                    <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100 hover:shadow-md transition">
+                        <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xl">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Nama Anggota 2</h3>
+                            <p class="text-xs text-slate-500">NIM: 043xxxxxx</p>
+                        </div>
+                    </div>
+                    <!-- Anggota 3 -->
+                    <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100 hover:shadow-md transition">
+                        <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xl">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Nama Anggota 3</h3>
+                            <p class="text-xs text-slate-500">NIM: 043xxxxxx</p>
+                        </div>
+                    </div>
+                    <!-- Anggota 4 -->
+                    <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100 hover:shadow-md transition">
+                        <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xl">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800">Nama Anggota 4</h3>
+                            <p class="text-xs text-slate-500">NIM: 043xxxxxx</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+
+        <!-- ==================== SECTION KAMUS (GLOSARIUM) ==================== -->
+        <div id="section-kamus" class="hidden">
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 max-w-5xl mx-auto">
+                <div class="mb-8 border-b pb-4">
+                    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-indigo-600"></i> Kamus & Istilah Gizi
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-2">Daftar terminologi yang digunakan dalam sistem NutriPlan Web App.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-5 bg-slate-50 rounded-lg border border-slate-100">
+                        <h3 class="font-bold text-indigo-700 text-lg mb-2">BMR (Basal Metabolic Rate)</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Merupakan jumlah kalori minimum yang dibutuhkan tubuh untuk melakukan fungsi dasar (bernafas, sirkulasi darah, fungsi organ) saat sedang istirahat secara total.</p>
+                    </div>
+                    <div class="p-5 bg-slate-50 rounded-lg border border-slate-100">
+                        <h3 class="font-bold text-indigo-700 text-lg mb-2">TDEE (Total Daily Energy Expenditure)</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Estimasi total kalori yang dibakar oleh tubuh dalam satu hari secara penuh. TDEE dihitung dengan mengalikan nilai BMR dengan Faktor Aktivitas Fisik (seperti ringan, sedang, berat).</p>
+                    </div>
+                    <div class="p-5 bg-slate-50 rounded-lg border border-slate-100">
+                        <h3 class="font-bold text-indigo-700 text-lg mb-2">BDD (Berat Dapat Dimakan)</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Persentase atau bagian dari suatu bahan makanan yang bersih dan dapat dikonsumsi setelah membuang bagian yang tidak bisa dimakan seperti kulit luar, tulang, atau biji keras.</p>
+                    </div>
+                    <div class="p-5 bg-slate-50 rounded-lg border border-slate-100">
+                        <h3 class="font-bold text-indigo-700 text-lg mb-2">Makronutrisi (Karbohidrat, Protein, Lemak)</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Zat gizi yang dibutuhkan tubuh dalam jumlah besar untuk menghasilkan energi. Di aplikasi ini, kalori harian idealnya didistribusikan sebesar 50% Karbohidrat, 25% Protein, dan 25% Lemak.</p>
+                    </div>
+                    <div class="p-5 bg-slate-50 rounded-lg border border-slate-100">
+                        <h3 class="font-bold text-indigo-700 text-lg mb-2">Defisit Kalori (Cut)</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Kondisi di mana seseorang mengonsumsi lebih sedikit kalori daripada nilai TDEE hariannya. Kondisi ini secara umum digunakan untuk program penurunan berat badan (-400 kcal/hari).</p>
+                    </div>
+                    <div class="p-5 bg-slate-50 rounded-lg border border-slate-100">
+                        <h3 class="font-bold text-indigo-700 text-lg mb-2">Surplus Kalori (Bulk)</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Kondisi di mana seseorang mengonsumsi lebih banyak kalori daripada nilai TDEE hariannya. Bertujuan untuk menaikkan berat badan atau massa otot (+400 kcal/hari).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <script>
@@ -213,6 +316,31 @@
         let loggedFoods = [];
         let calculatedBmr = 0;
         let targetTdee = 0;
+
+        // FUNGSI NAVIGASI TAB
+        function showSection(sectionId) {
+            // Sembunyikan semua section
+            document.getElementById('section-beranda').classList.add('hidden');
+            document.getElementById('section-beranda').classList.remove('block', 'grid');
+            document.getElementById('section-profile').classList.add('hidden');
+            document.getElementById('section-kamus').classList.add('hidden');
+
+            // Reset border menu navbar
+            document.getElementById('nav-beranda').classList.replace('border-white', 'border-transparent');
+            document.getElementById('nav-profile').classList.replace('border-white', 'border-transparent');
+            document.getElementById('nav-kamus').classList.replace('border-white', 'border-transparent');
+
+            // Tampilkan section yang dipilih
+            if(sectionId === 'beranda') {
+                document.getElementById('section-beranda').classList.remove('hidden');
+                document.getElementById('section-beranda').classList.add('grid');
+            } else {
+                document.getElementById(`section-${sectionId}`).classList.remove('hidden');
+            }
+            
+            // Aktifkan garis putih di tab yang dipilih
+            document.getElementById(`nav-${sectionId}`).classList.replace('border-transparent', 'border-white');
+        }
 
         async function fetchFoodsFromBackend() {
             try {
