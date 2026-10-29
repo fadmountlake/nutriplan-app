@@ -105,6 +105,13 @@
 
             <!-- Logging & Tracker Section (Kolom Kanan) -->
             <section class="md:col-span-8 space-y-6">
+                
+                <!-- Notifikasi Status Pencapaian Kalori (Muncul Dinamis) -->
+                <div id="statusAlert" class="hidden p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3">
+                    <i id="statusIcon" class="fa-solid fa-circle-info text-xl"></i>
+                    <span id="statusMessage">Status pencapaian akan muncul di sini.</span>
+                </div>
+
                 <!-- Ringkasan Progress Sisa Kalori Real-Time -->
                 <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
                     <div class="flex justify-between items-center mb-3">
@@ -120,7 +127,7 @@
                             <span id="bmrCal" class="text-base font-extrabold text-slate-700">0 kcal</span>
                         </div>
                         <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
-                            <span class="block text-[10px] text-indigo-600 uppercase font-bold">Target TDEE</span>
+                            <span class="block text-[10px] text-indigo-600 uppercase font-bold">Target Harian</span>
                             <span id="targetCal" class="text-base font-extrabold text-indigo-600">0 kcal</span>
                         </div>
                         <div class="bg-amber-50 p-3 rounded-lg border border-amber-100">
@@ -159,6 +166,7 @@
                         <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
                             <i class="fa-solid fa-magnifying-glass text-indigo-600"></i> Pilih & Cari Makanan (TKPI & USDA)
                         </h2>
+                        <!-- Porsi Bawaan 100g BDD -->
                         <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded border border-slate-200">
                             <i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i> Porsi bawaan dataset: 100g BDD
                         </span>
@@ -329,18 +337,15 @@
 
         // FUNGSI NAVIGASI TAB
         function showSection(sectionId) {
-            // Sembunyikan semua section
             document.getElementById('section-beranda').classList.add('hidden');
             document.getElementById('section-beranda').classList.remove('block', 'grid');
             document.getElementById('section-profile').classList.add('hidden');
             document.getElementById('section-kamus').classList.add('hidden');
 
-            // Reset border menu navbar
             document.getElementById('nav-beranda').classList.replace('border-white', 'border-transparent');
             document.getElementById('nav-profile').classList.replace('border-white', 'border-transparent');
             document.getElementById('nav-kamus').classList.replace('border-white', 'border-transparent');
 
-            // Tampilkan section yang dipilih
             if(sectionId === 'beranda') {
                 document.getElementById('section-beranda').classList.remove('hidden');
                 document.getElementById('section-beranda').classList.add('grid');
@@ -348,7 +353,6 @@
                 document.getElementById(`section-${sectionId}`).classList.remove('hidden');
             }
             
-            // Aktifkan garis putih di tab yang dipilih
             document.getElementById(`nav-${sectionId}`).classList.replace('border-transparent', 'border-white');
         }
 
@@ -519,10 +523,45 @@
             const progressBar = document.getElementById('progressBar');
             progressBar.style.width = `${percentage}%`;
 
-            if (percentage > 100) {
-                progressBar.className = "bg-red-500 h-2.5 rounded-full transition-all duration-300";
+            // === LOGIKA NOTIFIKASI AWAM ===
+            const alertBox = document.getElementById('statusAlert');
+            const alertMsg = document.getElementById('statusMessage');
+            const alertIcon = document.getElementById('statusIcon');
+            
+            // Tampilkan alert box jika target TDEE sudah diset (user sudah set profil)
+            if (targetTdee > 0) {
+                alertBox.classList.remove('hidden');
+                
+                if (percentage === 0) {
+                    // Belum ada asupan
+                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-slate-100 text-slate-600 border border-slate-200";
+                    alertMsg.innerText = "Mari mulai catat asupan makanan pertamamu hari ini.";
+                    alertIcon.className = "fa-solid fa-bell text-xl";
+                    progressBar.className = "bg-indigo-600 h-2.5 rounded-full transition-all duration-300";
+                } 
+                else if (percentage < 85) {
+                    // Kurang (Aman)
+                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-blue-50 text-blue-700 border border-blue-200";
+                    alertMsg.innerText = "Masih aman! Asupan kalori kamu belum mencapai target harian.";
+                    alertIcon.className = "fa-solid fa-thumbs-up text-xl";
+                    progressBar.className = "bg-indigo-600 h-2.5 rounded-full transition-all duration-300";
+                } 
+                else if (percentage >= 85 && percentage <= 100) {
+                    // Hampir / Pas Target (Bagus)
+                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
+                    alertMsg.innerText = "Luar biasa! Asupan kalori kamu sudah ideal & pas mencapai target.";
+                    alertIcon.className = "fa-solid fa-check-circle text-xl";
+                    progressBar.className = "bg-emerald-500 h-2.5 rounded-full transition-all duration-300";
+                } 
+                else if (percentage > 100) {
+                    // Melebihi (Peringatan)
+                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-red-50 text-red-700 border border-red-200";
+                    alertMsg.innerText = "Perhatian! Asupan kalori kamu telah MELEBIHI target harian yang dianjurkan.";
+                    alertIcon.className = "fa-solid fa-triangle-exclamation text-xl";
+                    progressBar.className = "bg-red-500 h-2.5 rounded-full transition-all duration-300";
+                }
             } else {
-                progressBar.className = "bg-indigo-600 h-2.5 rounded-full transition-all duration-300";
+                alertBox.classList.add('hidden');
             }
         }
 
