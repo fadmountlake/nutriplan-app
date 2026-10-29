@@ -509,7 +509,15 @@
             const remaining = targetTdee - totalConsumed;
 
             document.getElementById('consumedCal').innerText = `${Math.round(totalConsumed)} kcal`;
-            document.getElementById('remainingCal').innerText = `${Math.round(remaining)} kcal`;
+            
+            // Format Sisa Kuota (Menampilkan minus jika over)
+            const remainingElement = document.getElementById('remainingCal');
+            remainingElement.innerText = `${Math.round(remaining)} kcal`;
+            if (remaining < 0) {
+                remainingElement.className = "text-base font-extrabold text-red-600";
+            } else {
+                remainingElement.className = "text-base font-extrabold text-emerald-600";
+            }
 
             const targetCarbs = Math.round((targetTdee * 0.5) / 4);
             const targetProtein = Math.round((targetTdee * 0.25) / 4);
@@ -519,46 +527,56 @@
             document.getElementById('proteinTracker').innerText = `${Math.round(totalProtein)}g / ${targetProtein}g`;
             document.getElementById('fatTracker').innerText = `${Math.round(totalFat)}g / ${targetFat}g`;
 
-            const percentage = targetTdee > 0 ? Math.min(100, Math.round((totalConsumed / targetTdee) * 100)) : 0;
+            // Hitung Persentase
+            let percentage = 0;
+            if (targetTdee > 0) {
+                percentage = Math.round((totalConsumed / targetTdee) * 100);
+            }
+            
+            // Logika Bar & Notifikasi (Alert)
             const progressBar = document.getElementById('progressBar');
-            progressBar.style.width = `${percentage}%`;
-
-            // === LOGIKA NOTIFIKASI AWAM ===
             const alertBox = document.getElementById('statusAlert');
             const alertMsg = document.getElementById('statusMessage');
             const alertIcon = document.getElementById('statusIcon');
             
-            // Tampilkan alert box jika target TDEE sudah diset (user sudah set profil)
             if (targetTdee > 0) {
                 alertBox.classList.remove('hidden');
                 
                 if (percentage === 0) {
                     // Belum ada asupan
-                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-slate-100 text-slate-600 border border-slate-200";
+                    progressBar.style.width = `0%`;
+                    progressBar.className = "bg-indigo-600 h-2.5 rounded-full transition-all duration-300";
+                    
+                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-slate-100 text-slate-600 border border-slate-200 mb-4";
                     alertMsg.innerText = "Mari mulai catat asupan makanan pertamamu hari ini.";
                     alertIcon.className = "fa-solid fa-bell text-xl";
-                    progressBar.className = "bg-indigo-600 h-2.5 rounded-full transition-all duration-300";
                 } 
-                else if (percentage < 85) {
+                else if (percentage > 0 && percentage < 85) {
                     // Kurang (Aman)
-                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-blue-50 text-blue-700 border border-blue-200";
+                    progressBar.style.width = `${percentage}%`;
+                    progressBar.className = "bg-indigo-600 h-2.5 rounded-full transition-all duration-300";
+                    
+                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-blue-50 text-blue-700 border border-blue-200 mb-4";
                     alertMsg.innerText = "Masih aman! Asupan kalori kamu belum mencapai target harian.";
                     alertIcon.className = "fa-solid fa-thumbs-up text-xl";
-                    progressBar.className = "bg-indigo-600 h-2.5 rounded-full transition-all duration-300";
                 } 
                 else if (percentage >= 85 && percentage <= 100) {
                     // Hampir / Pas Target (Bagus)
-                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-emerald-50 text-emerald-700 border border-emerald-200";
+                    progressBar.style.width = `${percentage}%`;
+                    progressBar.className = "bg-emerald-500 h-2.5 rounded-full transition-all duration-300";
+                    
+                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-emerald-50 text-emerald-700 border border-emerald-200 mb-4";
                     alertMsg.innerText = "Luar biasa! Asupan kalori kamu sudah ideal & pas mencapai target.";
                     alertIcon.className = "fa-solid fa-check-circle text-xl";
-                    progressBar.className = "bg-emerald-500 h-2.5 rounded-full transition-all duration-300";
                 } 
                 else if (percentage > 100) {
-                    // Melebihi (Peringatan)
-                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-red-50 text-red-700 border border-red-200";
-                    alertMsg.innerText = "Perhatian! Asupan kalori kamu telah MELEBIHI target harian yang dianjurkan.";
-                    alertIcon.className = "fa-solid fa-triangle-exclamation text-xl";
+                    // Melebihi Batas Target
+                    progressBar.style.width = `100%`; // Mentok penuh
                     progressBar.className = "bg-red-500 h-2.5 rounded-full transition-all duration-300";
+                    
+                    alertBox.className = "p-4 rounded-xl shadow-sm text-sm font-semibold flex items-center gap-3 bg-red-50 text-red-700 border border-red-200 mb-4";
+                    alertMsg.innerText = "Perhatian! Asupan kalori kamu telah MELEBIHI batas target harian yang dianjurkan.";
+                    alertIcon.className = "fa-solid fa-triangle-exclamation text-xl";
                 }
             } else {
                 alertBox.classList.add('hidden');
