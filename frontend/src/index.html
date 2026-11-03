@@ -88,6 +88,17 @@
                         </div>
 
                         <div>
+                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Tingkat Aktivitas Fisik</label>
+                            <select id="activityLevel" class="w-full border rounded-lg p-2 text-xs border-slate-300">
+                                <option value="1.2">Sedentari / Jarang Olahraga (1.2)</option>
+                                <option value="1.375">Aktivitas Ringan (Olahraga 1-3x/minggu) (1.375)</option>
+                                <option value="1.55" selected>Aktivitas Sedang (Olahraga 4-5x/minggu) (1.55)</option>
+                                <option value="1.725">Sangat Aktif (Olahraga 6-7x/minggu) (1.725)</option>
+                                <option value="1.9">Ekstra Aktif (Pekerja Fisik / Atlet) (1.9)</option>
+                            </select>
+                        </div>
+
+                        <div>
                             <label class="block text-[11px] font-medium text-slate-600 mb-1">Target Berat Badan</label>
                             <select id="goal" class="w-full border rounded-lg p-2 text-xs border-slate-300">
                                 <option value="maintain">Pertahankan BB</option>
@@ -421,7 +432,7 @@
             const height = parseFloat(document.getElementById('height').value) || 170;
             const weight = parseFloat(document.getElementById('weight').value) || 65;
             
-            const activity = 1.55; 
+            const activity = parseFloat(document.getElementById('activityLevel').value) || 1.55; 
             const goal = document.getElementById('goal').value;
 
             calculatedBmr = (gender === 'male') 
