@@ -1,3 +1,6 @@
+Berikut adalah revisi kode HTML/JavaScript sesuai kebutuhan Anda. Kami mengambil nilai tengah untuk 3 kategori aktivitas fisik dari Tabel 5.3 (standar FAO/WHO/UNU), yaitu: **Sedentary/Ringan (1.55)**, **Active/Sedang (1.85)**, dan **Vigorous/Berat (2.20)**, lalu mengembalikannya ke form pilihan (dropdown).
+
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -87,14 +90,13 @@
                             </div>
                         </div>
 
+                        <!-- REVISI: Dropdown dengan 3 Kategori (Standar FAO/WHO/UNU) -->
                         <div>
-                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Tingkat Aktivitas Fisik</label>
-                            <select id="activityLevel" class="w-full border rounded-lg p-2 text-xs border-slate-300">
-                                <option value="1.2">Sedentari / Jarang Olahraga (1.2)</option>
-                                <option value="1.375">Aktivitas Ringan (Olahraga 1-3x/minggu) (1.375)</option>
-                                <option value="1.55" selected>Aktivitas Sedang (Olahraga 4-5x/minggu) (1.55)</option>
-                                <option value="1.725">Sangat Aktif (Olahraga 6-7x/minggu) (1.725)</option>
-                                <option value="1.9">Ekstra Aktif (Pekerja Fisik / Atlet) (1.9)</option>
+                            <label class="block text-[11px] font-medium text-slate-600 mb-1">Tingkat Aktivitas Harian (PAL)</label>
+                            <select id="activity" class="w-full border rounded-lg p-2 text-xs border-slate-300">
+                                <option value="1.55" selected>Ringan / Sedentari (PAL 1.55)</option>
+                                <option value="1.85">Sedang / Aktif (PAL 1.85)</option>
+                                <option value="2.20">Berat / Sangat Aktif (PAL 2.20)</option>
                             </select>
                         </div>
 
@@ -432,7 +434,8 @@
             const height = parseFloat(document.getElementById('height').value) || 170;
             const weight = parseFloat(document.getElementById('weight').value) || 65;
             
-            const activity = parseFloat(document.getElementById('activityLevel').value) || 1.55; 
+            // REVISI: Mengambil input dropdown tingkat aktivitas (bukan nilai konstan)
+            const activity = parseFloat(document.getElementById('activity').value) || 1.55; 
             const goal = document.getElementById('goal').value;
 
             calculatedBmr = (gender === 'male') 
@@ -598,3 +601,5 @@
     </script>
 </body>
 </html>
+
+```
